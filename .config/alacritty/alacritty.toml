@@ -1,0 +1,33 @@
+[general]
+import = [
+	"~/.config/alacritty/themes/themes/catppuccin_mocha.toml",
+]
+
+[env]
+TERM = "xterm-256color"
+COLORTERM = "true"
+
+[window]
+padding.x = 10
+padding.y = 10
+
+decorations = "Buttonless"
+
+opacity = 0.6
+blur = true
+
+option_as_alt = "Both"
+
+[font]
+normal.family = "MesloLGS Nerd Font Mono"
+
+size = 15
+
+[cursor]
+style = { shape = "Block", blinking = "On"}
+
+# [keyboard]
+# bindings = [
+# 	{ key = "F", mods = "Control", command = "~/.local/bin/tmux_dir_session.sh"}
+# ]
+
