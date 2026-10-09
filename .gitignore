@@ -7,4 +7,5 @@ tmux/.config/tmux/plugins/
 **/local.conf
 **/machine.lua
 **/hyprpaper.local.conf
+**/hyprlock.local.conf
 **/tmux.local.conf

@@ -2,7 +2,11 @@
 set -eu
 command -v hyprlock >/dev/null || { notify-send 'Lock screen' 'Install hyprlock.'; exit 1; }
 pgrep -u "$(id -u)" -x hyprlock >/dev/null && exit 0
-if [ "${HYPR_LOCK_SOFTWARE_RENDERING:-0}" = 1 ]; then
-    exec env LIBGL_ALWAYS_SOFTWARE=1 hyprlock
+local_config="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprlock.local.conf"
+if [ -f "$local_config" ]; then
+    set -- --config "$local_config" "$@"
 fi
-exec hyprlock
+if [ "${HYPR_LOCK_SOFTWARE_RENDERING:-0}" = 1 ]; then
+    exec env LIBGL_ALWAYS_SOFTWARE=1 hyprlock "$@"
+fi
+exec hyprlock "$@"

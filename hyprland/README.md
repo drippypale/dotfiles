@@ -55,3 +55,24 @@ Waybar/Hypridle/Hyprpaper when convenient. Avoid starting duplicate daemons.
 
 Useful desktop keys: Alt+Q opens Kitty, Alt+Shift+V opens clipboard history,
 Print takes a region screenshot and copies it, and Alt+Shift+L locks the session.
+
+## Local lock screen settings
+
+The `hypr-lock` helper uses `~/.config/hypr/hyprlock.local.conf` when present
+(or the equivalent under `XDG_CONFIG_HOME`). Otherwise it uses Hyprlock's
+default config. This applies to both the lock shortcut and Hypridle.
+
+For a VM where GPU screenshot capture fails, create that local file with:
+
+```ini
+source = ~/.config/hypr/hyprlock.conf
+
+general {
+    screencopy_mode = 1
+}
+```
+
+This keeps the shared appearance and uses CPU screenshot capture on this
+machine. No compositor reload is needed; the next lock uses the new settings.
+The local file is ignored by Git. Launching `hyprlock` directly bypasses this
+helper; use `hypr-lock` or pass `--config` explicitly to test local settings.
