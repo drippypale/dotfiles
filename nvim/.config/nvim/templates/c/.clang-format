@@ -1,0 +1,38 @@
+# .clang-format configuration for C projects
+# Place this file in your project root directory
+
+# Base style
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# Line breaking
+ColumnLimit: 80
+BreakBeforeBraces: Linux
+
+# Pointer alignment
+PointerAlignment: Right
+DerivePointerAlignment: false
+
+# Function declarations
+AllowShortFunctionsOnASingleLine: None
+AlwaysBreakAfterReturnType: None
+
+# Control statements
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Spacing
+SpaceBeforeParens: ControlStatements
+SpaceAfterCStyleCast: false
+
+# Includes
+SortIncludes: true
+
+# Alignment
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+

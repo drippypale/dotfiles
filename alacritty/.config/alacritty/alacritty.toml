@@ -1,6 +1,6 @@
 [general]
 import = [
-	"~/.config/alacritty/themes/themes/catppuccin_mocha.toml",
+	"~/.config/alacritty/catppuccin_mocha.toml",
 ]
 
 [env]
