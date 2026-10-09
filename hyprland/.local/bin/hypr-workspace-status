@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+"""Supply Waybar workspace buttons using current Hyprland JSON, not legacy IDs."""
+import fcntl
+import json
+import os
+from pathlib import Path
+import socket
+import subprocess
+
+signature = os.environ.get('HYPRLAND_INSTANCE_SIGNATURE', '')
+runtime = Path(os.environ.get('XDG_RUNTIME_DIR', f'/run/user/{os.getuid()}'))
+directory = runtime / 'hypr-workspace-status' / signature
+directory.mkdir(parents=True, exist_ok=True)
+lock = (directory / 'daemon.lock').open('w')
+try:
+    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+except BlockingIOError:
+    raise SystemExit(0)
+
+def query(command):
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as connection:
+        connection.settimeout(2)
+        connection.connect(str(runtime / 'hypr' / signature / '.socket.sock'))
+        connection.sendall(('j/' + command).encode())
+        chunks = []
+        while chunk := connection.recv(65536):
+            chunks.append(chunk)
+    return json.loads(b''.join(chunks))
+
+def statuses(active, workspaces):
+    current = active.get('name', '')
+    names = {workspace.get('name', '') for workspace in workspaces}
+    for name in [str(number) for number in range(1, 11)] + ['Browser', 'Terminal', 'Files', 'Dev']:
+        shown = name in names or name == current or not name.isdigit()
+        yield name, {
+            'text': name if shown else '',
+            'class': ['workspace', 'active' if name == current else 'inactive'],
+            'tooltip': 'Workspace ' + name,
+        }
+
+def refresh():
+    active = query('activeworkspace')
+    workspaces = query('workspaces')
+    changed = False
+    for name, status in statuses(active, workspaces):
+        target = directory / (name + '.json')
+        serialized = json.dumps(status) + '\n'
+        if not target.exists() or target.read_text() != serialized:
+            temporary = target.with_suffix('.tmp')
+            temporary.write_text(serialized)
+            temporary.replace(target)
+            changed = True
+    if changed:
+        subprocess.run(['pkill', '-u', str(os.getuid()), '-RTMIN+8', '-x', 'waybar'],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+# Subscribe before the initial snapshot so switches cannot be missed at startup.
+relevant = {'workspace', 'workspacev2', 'focusedmon', 'focusedmonv2',
+            'createworkspace', 'createworkspacev2', 'destroyworkspace',
+            'destroyworkspacev2', 'renameworkspace', 'moveworkspacev2',
+            'configreloaded', 'monitoraddedv2', 'monitorremoved'}
+with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as events:
+    events.connect(str(runtime / 'hypr' / signature / '.socket2.sock'))
+    refresh()
+    with events.makefile('r') as stream:
+        for line in stream:
+            if line.partition('>>')[0] in relevant:
+                try:
+                    refresh()
+                except (OSError, ValueError, TypeError) as error:
+                    print('Workspace update failed:', error, flush=True)

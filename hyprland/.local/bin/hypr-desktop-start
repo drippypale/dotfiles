@@ -1,0 +1,26 @@
+#!/bin/sh
+export PATH="$HOME/.local/bin:$PATH"
+# Import the active session for D-Bus activated portals.
+"$HOME/.local/bin/hypr-workspace-status" > "${XDG_RUNTIME_DIR:-/tmp}/hypr-workspace-status.log" 2>&1 &
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE
+for agent in /usr/lib/polkit-kde-authentication-agent-1 \
+    /usr/libexec/polkit-kde-authentication-agent-1 \
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; do
+    if [ -x "$agent" ]; then
+        if ! pgrep -u "$(id -u)" -f "^$agent$" >/dev/null; then
+            "$agent" &
+        fi
+        break
+    fi
+done
+if command -v cliphist >/dev/null && command -v wl-paste >/dev/null; then
+    if ! pgrep -u "$(id -u)" -f '^wl-paste --type text --watch cliphist store$' >/dev/null; then
+        wl-paste --type text --watch cliphist store &
+    fi
+    if ! pgrep -u "$(id -u)" -f '^wl-paste --type image --watch cliphist store$' >/dev/null; then
+        wl-paste --type image --watch cliphist store &
+    fi
+fi
+if command -v hypridle >/dev/null && ! pgrep -u "$(id -u)" -x hypridle >/dev/null; then
+    hypridle &
+fi

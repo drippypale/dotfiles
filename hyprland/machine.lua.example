@@ -1,0 +1,26 @@
+-- Copy to ~/.config/hypr/machine.lua (untracked).
+-- Each omitted value uses the shared default.
+return {
+    -- monitor_mode = "1920x1080@60",
+    -- monitor_scale = 1,
+    -- main_mod = "ALT",
+    -- terminal = "kitty",
+    -- browser = "google-chrome-stable --new-window",
+    -- file_manager = "dolphin",
+    -- menu = "rofi -show drun -show-icons",
+
+    -- Enable only if this machine needs VM/software rendering workarounds:
+    -- terminal = "env LIBGL_ALWAYS_SOFTWARE=1 kitty",
+    -- vicinae_server = "env LIBGL_ALWAYS_SOFTWARE=1 vicinae server",
+    -- blur = false,
+    -- shadow = false,
+    -- environment = {
+    --     WLR_RENDERER = "pixman",
+    --     WLR_NO_HARDWARE_CURSORS = "1",
+    --     HYPR_LOCK_SOFTWARE_RENDERING = "1",
+    -- },
+
+    -- Copy the shared hyprpaper.conf to ~/.config/hypr/hyprpaper.local.conf,
+    -- then add preload/wallpaper entries with a real path on this machine.
+    -- hyprpaper = 'hyprpaper -c "$HOME/.config/hypr/hyprpaper.local.conf"',
+}

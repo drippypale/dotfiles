@@ -1,4 +1,36 @@
-# Copy to ~/.zshrc.local (untracked) and fill in per machine.
-# export ANTHROPIC_API_KEY=...
+# Copy to ~/.zshrc.local. This file is sourced before shared plugin setup.
+# Keep credentials, project helpers and optional toolchain setup here.
+
 # export JAVA_HOME=...
-# path+=$HOME/flutter/bin
+# export OBSIDIAN_VAULT="$HOME/Documents/Main-Vault"
+# path+=("$HOME/go/bin" "$HOME/flutter/bin" "$HOME/.bun/bin")
+# path+=("$HOME/.yarn/bin" "$HOME/.config/yarn/global/node_modules/.bin")
+# path+=("$HOME/.opencode/bin" "${KREW_ROOT:-$HOME/.krew}/bin")
+
+# Enable only the completion plugins you use:
+# plugins+=(docker docker-compose kubectl poetry git-flow nix-zsh-completions)
+
+# Node version manager:
+# export NVM_DIR="$HOME/.nvm"
+# [[ -r "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+# [[ -r "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
+
+# Python version manager (virtualenv is optional):
+# export PYENV_ROOT="$HOME/.pyenv"
+# [[ -d "$PYENV_ROOT/bin" ]] && path=("$PYENV_ROOT/bin" $path)
+# if (( $+commands[pyenv] )); then
+#   eval "$(pyenv init - zsh)"
+#   if pyenv commands | command grep -qx virtualenv-init; then
+#     eval "$(pyenv virtualenv-init -)"
+#   fi
+# fi
+
+# Rust:
+# [[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# Enable only for projects that need these Python build flags:
+# export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
+# export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
+
+# Put cluster-specific helpers (bspod/be/bcp/bcpf) here rather than assuming
+# every machine has a Kubernetes backend with app=backend,role=shell labels.

@@ -27,7 +27,7 @@ fi
 # if echo "$SESSIONS" | grep -qx "$SESSION_NAME"; then
 if [ "$is_new_session" -eq 1 ]; then
   # Create a new session in detached mode, then switch to it
-  tmux new-session -ds "$session_name" -c "~/"
+  tmux new-session -ds "$session_name" -c "$HOME"
 fi
 tmux switch-client -t "$session_name"
 
