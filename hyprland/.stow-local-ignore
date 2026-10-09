@@ -1,0 +1,4 @@
+# Local settings are authored on each machine, never linked from examples.
+^/README\.md$
+^/machine\.lua\.example$
+^/machine-setup\.md$

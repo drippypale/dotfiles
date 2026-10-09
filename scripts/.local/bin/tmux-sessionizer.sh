@@ -26,7 +26,7 @@ if [[ $# -gt 0 ]]; then
 else
     # 1) Use zoxide's interactive selector first.
     #    Pressing ESC or Ctrl-C in zoxide leaves 'selected' empty.
-    selected="$(z query --interactive)"
+    selected="$(zoxide query --interactive 2>/dev/null)"
 
     # 2) If zoxide was cancelled or gave no result, fall back to fd + fzf.
     if [[ -z "$selected" ]]; then

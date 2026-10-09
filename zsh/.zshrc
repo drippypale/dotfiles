@@ -1,149 +1,155 @@
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# Shared interactive shell settings. Toolchains, secrets and project helpers
+# belong in ~/.zshrc.local, loaded before plugins and completion setup.
+[[ -o interactive ]] || return
 
-plugins=(
-  poetry
-  git
-  web-search
-  fzf
-  tmux
-  docker
-  docker-compose
-  kubectl
-  colored-man-pages
-  git-flow
-  zsh-autosuggestions
-  zsh-vi-mode
-  nix-zsh-completions
-)
-
-export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
-export ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_USER_DEFAULT
-export ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_USER_DEFAULT
-
-source $ZSH/oh-my-zsh.sh
-
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
-
-alias zshconfig="nvim ~/.zshrc"
+typeset -U path PATH
+path=("$HOME/.local/bin" $path)
+export ZSH="${ZSH:-$HOME/.oh-my-zsh}"
+export ZSH_CUSTOM="${ZSH_CUSTOM:-$ZSH/custom}"
 export BAT_THEME="Catppuccin Mocha"
 
-# ------- fzf -------------
-# fzf < 0.48 (Ubuntu 24.04) has no `--zsh`; Debian ships the scripts under /usr/share/doc
-if fzf --zsh &>/dev/null; then
-  source <(fzf --zsh)
-elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
-  source /usr/share/doc/fzf/examples/key-bindings.zsh
-  source /usr/share/doc/fzf/examples/completion.zsh
+HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt append_history share_history hist_ignore_dups hist_ignore_space
+bindkey -v
+export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+
+# Local settings can extend plugins or initialize installed language managers.
+plugins=(git web-search colored-man-pages zsh-autosuggestions zsh-vi-mode)
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# Only enable plugins present on this machine. Completion plugins for optional
+# developer tools can be added to `plugins` in the local file.
+() {
+  local plugin
+  local -a available
+  for plugin in "${plugins[@]}"; do
+    if [[ -r "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" ||
+          -r "$ZSH/plugins/$plugin/$plugin.plugin.zsh" ]]; then
+      available+=("$plugin")
+    fi
+  done
+  plugins=("${available[@]}")
+}
+
+ZSH_THEME=""
+if [[ -r "$ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+  ZSH_THEME="powerlevel10k/powerlevel10k"
+fi
+if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"
+else
+  autoload -Uz compinit
+  compinit -i
+  PROMPT='%F{blue}%n@%m%f %F{cyan}%~%f %# '
 fi
 
-bindkey '^P' fzf-history-widget
-fcd() {
-        local dir
-        dir=$(find ~ -type d -not -path '*/\.*' 2> /dev/null | fzf +m) && cd "$dir"
-}
+if [[ -z "${EDITOR:-}" ]]; then
+  if (( $+commands[nvim] )); then
+    EDITOR=nvim
+  elif (( $+commands[vim] )); then
+    EDITOR=vim
+  else
+    EDITOR=vi
+  fi
+fi
+export EDITOR
+export VISUAL="${VISUAL:-$EDITOR}"
+alias zshconfig='${EDITOR} ~/.zshrc'
+(( $+commands[python3] )) && alias python=python3
+(( $+commands[lazygit] )) && alias lg=lazygit
+(( $+commands[kubectl] )) && alias k=kubectl
+(( $+commands[kubectx] )) && alias kx=kubectx
 
-_fzf_comprun() {
-    local command=$1
-    shift
-
-    case "$command" in
-        cd)             fzf --preview "eza --tree --color=always {} | head -200" "$@" ;;
-        z)             fzf --preview "eza --tree --color=always {} | head -200" "$@" ;;
-        export|unset)   fzf --preview "eval 'echo \$' {}"                        "$@" ;;
-        ssh)            fzf --preview 'dig {}'                                   "$@" ;;
-        *)              fzf --preview "--preview 'bat -n --color=always --line-range :500 {}'" "$@" ;;
-    esac
-}
-
-# -------- man -----------
-my_man() {
-     nvim "+hide Man $1"
-}
-
-alias man=my_man
-
-# -------- PATH -----------
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export PATH="$PATH:$HOME/.local/bin:$HOME/go/bin"
-export PATH="$HOME/.bun/bin:$HOME/.opencode/bin:$PATH"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
-export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
-alias python="python3"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# -------- zsh-syntax-highlighting -----------
-for f in /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
-         /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
-         /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
-  [[ -f $f ]] && { source $f; break; }
-done
-unset f
-
-# -------- zoxide -----------
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-
-# ------- Eza (better ls) ---------
-(( $+commands[eza] )) && alias ls="eza --color=always --long --git --icons=always"
-
-# ------- Yazi file manager ----------
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
-
-# ------- Kuber -------------
-alias kx="kubectx"
-alias k="kubectl"
-bspod() {
-  k get pod -l app=backend -l role=shell -o jsonpath='{.items[0].metadata.name}'
-}
-
-be() {
-  if [[ $# -eq 0 ]]; then
-    set -- bash
+# fzf is initialized here rather than also enabling its oh-my-zsh plugin.
+if (( $+commands[fzf] )); then
+  if fzf --zsh &>/dev/null; then
+    source <(fzf --zsh)
+  elif [[ -r /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+    [[ -r /usr/share/doc/fzf/examples/completion.zsh ]] &&
+      source /usr/share/doc/fzf/examples/completion.zsh
+  elif [[ -r /usr/share/fzf/key-bindings.zsh ]]; then
+    source /usr/share/fzf/key-bindings.zsh
+    [[ -r /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
   fi
 
-  k exec -it "$(bspod)" -- "$@"
-}
+  # zsh-vi-mode initializes lazily; restore this binding after it does so.
+  _dotfiles_history_binding() {
+    if (( $+widgets[fzf-history-widget] )); then
+      bindkey -M emacs '^P' fzf-history-widget
+      bindkey -M viins '^P' fzf-history-widget
+    fi
+  }
+  _dotfiles_history_binding
+  if (( $+functions[zvm_init] )); then
+    zvm_after_init_commands+=(_dotfiles_history_binding)
+  fi
 
-bcp() {
-  k cp "$1" "$(bspod):$2"
-}
+  fcd() {
+    local dir
+    if (( $+commands[fd] )); then
+      dir=$(fd --type d . "$HOME" 2>/dev/null | fzf +m)
+    else
+      dir=$(find "$HOME" -type d -not -path '*/.*' 2>/dev/null | fzf +m)
+    fi
+    [[ -n "$dir" ]] && builtin cd -- "$dir"
+  }
 
-bcpf() {
-  k cp "$(bspod):$1" "$2"
-}
-
-# -------- lazygit ------
-alias lg='lazygit'
-
-# -------- uv -------------
-(( $+commands[uv] )) && eval "$(uv generate-shell-completion zsh)"
-(( $+commands[uvx] )) && eval "$(uvx --generate-shell-completion zsh)"
-
-# ------- pyenv -------------
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-if (( $+commands[pyenv] )); then
-  eval "$(pyenv init - zsh)"
-  eval "$(pyenv virtualenv-init -)"
+  _fzf_comprun() {
+    local cmd=$1
+    shift
+    case "$cmd" in
+      cd|z)
+        if (( $+commands[eza] )); then
+          fzf --preview 'eza --tree --color=always --level=3 -- {} | head -200' "$@"
+        else
+          fzf --preview 'ls -la -- {}' "$@"
+        fi ;;
+      ssh)
+        if (( $+commands[dig] )); then
+          fzf --preview 'dig {}' "$@"
+        else
+          fzf "$@"
+        fi ;;
+      *)
+        if (( $+commands[bat] )); then
+          fzf --preview 'bat -n --color=always --line-range :500 -- {}' "$@"
+        else
+          fzf "$@"
+        fi ;;
+    esac
+  }
 fi
 
-# Machine-specific paths and secrets live here, outside the repo
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+(( $+commands[eza] )) && alias ls='eza --color=auto --long --git --icons=auto'
+
+if (( $+commands[yazi] )); then
+  y() {
+    local tmp cwd result
+    tmp=$(mktemp -t yazi-cwd.XXXXXX) || return
+    command yazi "$@" --cwd-file="$tmp"
+    result=$?
+    cwd=$(command cat -- "$tmp")
+    command rm -f -- "$tmp"
+    [[ -n "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
+    return $result
+  }
+fi
+
+(( $+commands[uv] )) && eval "$(uv generate-shell-completion zsh)"
+(( $+commands[uvx] )) && eval "$(uvx --generate-shell-completion zsh)"
+[[ "$ZSH_THEME" == powerlevel10k/powerlevel10k && -r "$HOME/.p10k.zsh" ]] &&
+  source "$HOME/.p10k.zsh"
+
+# Load last so highlighting observes all widgets installed above.
+for _highlight in \
+  /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+  [[ -r "$_highlight" ]] && { source "$_highlight"; break; }
+done
+unset _highlight

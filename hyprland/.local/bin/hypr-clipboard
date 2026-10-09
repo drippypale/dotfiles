@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+for tool in cliphist wl-copy rofi; do
+    command -v "$tool" >/dev/null || { notify-send 'Clipboard' "Missing tool: $tool"; exit 1; }
+done
+selection=$(cliphist list | rofi -dmenu -i -p Clipboard) || exit 0
+[ -n "$selection" ] || exit 0
+printf '%s\n' "$selection" | cliphist decode | wl-copy
