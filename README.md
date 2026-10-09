@@ -7,6 +7,7 @@ Managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level fold
 | `nvim`      | `~/.config/nvim`                 |
 | `tmux`      | `~/.config/tmux`                 |
 | `alacritty` | `~/.config/alacritty`            |
+| `zsh`       | `~/.zshrc`, `~/.zshenv`, `~/.p10k.zsh` |
 | `scripts`   | `~/.local/bin`                   |
 | `bat`, `yazi`, `tmuxinator` | `~/.config/<name>` |
 
@@ -25,5 +26,7 @@ Stow runs with `--no-folding`, so `~/.config/tmux` stays a real directory and pl
 
 ## Per-machine notes
 
+- Secrets and machine-specific paths go in `~/.zshrc.local`, which `.zshrc` sources and which is never tracked. `zsh/zshrc.local.example` lists what usually belongs there.
+- oh-my-zsh, powerlevel10k and the zsh plugins are cloned by `install.sh`, not stored here.
 - Obsidian vault path for nvim: set `OBSIDIAN_VAULT`, otherwise the iCloud path on macOS and `~/Documents/Main-Vault` elsewhere.
 - Ubuntu installs Neovim from the official release tarball because apt's version is too old for the plugin set.
