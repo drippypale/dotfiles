@@ -234,6 +234,12 @@ hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + k",    hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + j",  hl.dsp.focus({ direction = "down" }))
 
+-- Move the focused window itself with mainMod + SHIFT + arrow keys
+hl.bind(mainMod .. " + SHIFT + h", hl.dsp.window.move({ direction = "left" }))
+hl.bind(mainMod .. " + SHIFT + l", hl.dsp.window.move({ direction = "right" }))
+hl.bind(mainMod .. " + SHIFT + k", hl.dsp.window.move({ direction = "up" }))
+hl.bind(mainMod .. " + SHIFT + j", hl.dsp.window.move({ direction = "down" }))
+
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
 for i = 1, 10 do
@@ -318,7 +324,7 @@ hl.layer_rule({
 
 -- Desktop utilities.
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(helper("hypr-clipboard")))
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd(helper("hypr-lock")))
+hl.bind("ALT + SHIFT + L", hl.dsp.exec_cmd(helper("hypr-lock")))
 hl.bind("Print", hl.dsp.exec_cmd(helper("hypr-screenshot")))
 
 -- Dedicated named workspaces are separate from Alt+1..0.
