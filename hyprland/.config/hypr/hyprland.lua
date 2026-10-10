@@ -187,7 +187,7 @@ hl.config({
 
 hl.config({
     input = {
-        kb_layout  = "us",
+        kb_layout  = "us,ir",
         kb_variant = "",
         kb_model   = "",
         kb_options = "",
@@ -218,6 +218,7 @@ hl.gesture({
 local mainMod = machine.main_mod or "SUPER"
 
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("vicinae toggle"))
+hl.bind(mainMod .. " + SHIFT + Space", hl.dsp.exec_cmd("hyprctl switchxkblayout current next"))
 -- Example binds, see https://wiki.hypr.land/configuring/core/binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + C", hl.dsp.window.close())
@@ -227,6 +228,7 @@ hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + W", hl.dsp.layout("togglesplit"))    -- dwindle only; moved off B, which the Browser named workspace uses
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen())
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + h",  hl.dsp.focus({ direction = "left" }))
@@ -324,7 +326,7 @@ hl.layer_rule({
 
 -- Desktop utilities.
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(helper("hypr-clipboard")))
-hl.bind("ALT + SHIFT + L", hl.dsp.exec_cmd(helper("hypr-lock")))
+hl.bind("CTRL + SHIFT + L", hl.dsp.exec_cmd(helper("hypr-lock")))
 hl.bind("Print", hl.dsp.exec_cmd(helper("hypr-screenshot")))
 
 -- Dedicated named workspaces are separate from Alt+1..0.
