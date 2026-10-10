@@ -24,12 +24,15 @@ validate_packages() {
   local package
   for package in "${PACKAGES[@]}"; do
     case "$package" in
-      nvim|tmux|kitty|alacritty|zsh|scripts|bat|yazi|tmuxinator|hyprland) ;;
+      nvim|tmux|kitty|alacritty|zsh|scripts|bat|yazi|tmuxinator|hyprland|i3|git|lazygit|htop) ;;
       *) warn "Unknown package: $package"; exit 2 ;;
     esac
   done
   if has_package hyprland && [[ "$(uname -s)" != Linux ]]; then
     warn "The Hyprland desktop package requires Linux"; exit 2
+  fi
+  if has_package i3 && [[ "$(uname -s)" != Linux ]]; then
+    warn "The i3 package requires Linux (X11)"; exit 2
   fi
 }
 TPM_DIR="$HOME/.config/tmux/plugins/tpm"
@@ -128,6 +131,22 @@ install_deps() {
           xdg-user-dirs xdg-desktop-portal-hyprland xdg-desktop-portal-gtk)
         # Vicinae and Chrome are optional applications installed separately.
         ;;
+      i3)
+        case "$os" in
+          arch) deps+=(i3-wm picom feh maim xclip dex xss-lock i3lock i3status
+            rofi network-manager-applet) ;;
+          ubuntu) deps+=(i3 picom feh maim xclip dex xss-lock i3lock i3status
+            rofi network-manager-gnome) ;;
+          *) warn "Install i3/picom dependencies manually on this distribution"; continue ;;
+        esac ;;
+      git) deps+=(git) ;;
+      lazygit)
+        if [[ "$os" == ubuntu ]]; then
+          warn "Install lazygit manually on Ubuntu (not in apt); see https://github.com/jesseduffield/lazygit#installation"
+        else
+          deps+=(lazygit)
+        fi ;;
+      htop) deps+=(htop) ;;
     esac
   done
   case "$os" in

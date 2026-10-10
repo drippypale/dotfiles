@@ -11,7 +11,10 @@ and runtime directories out of this repo.
 | `nvim`, `tmux` | `~/.config/<name>` |
 | `scripts` | `~/.local/bin` |
 | `bat`, `yazi`, `tmuxinator` | `~/.config/<name>` |
+| `git` | `~/.gitconfig` |
+| `lazygit`, `htop` | `~/.config/<name>` |
 | `hyprland` (opt-in, Linux) | Hyprland, Waybar, Mako, portal configs and desktop scripts |
+| `i3` (opt-in, Linux/X11) | i3, picom |
 
 ## Install
 
@@ -33,7 +36,8 @@ STOW_PACKAGES="nvim tmux kitty zsh scripts bat yazi hyprland" ./install.sh
 Dependencies are installed with brew/apt/pacman. Arch installation performs a
 system upgrade. Desktop dependencies are automated on Arch; on other Linux
 distributions install them manually (see [desktop notes](hyprland/README.md)).
-Ubuntu uses the official Neovim tarball; Yazi requires a separate installation.
+Ubuntu uses the official Neovim tarball; Yazi and lazygit require a separate
+installation (lazygit isn't in Ubuntu's apt repos).
 Chrome and Vicinae are optional desktop applications installed separately.
 
 Only selected packages get their dependencies and initialization. Zsh installs
@@ -70,8 +74,15 @@ configs. Documentation and local override examples are not installed.
   advertises `tmux-256color` and recognizes Kitty RGB support. Alacritty's
   vi-mode/search/dim color settings have no direct shared mapping. Linux blur
   is supplied by the compositor and can be disabled in the desktop local file.
+- **Alacritty:** add machine adjustments (opacity, font size, etc.) in
+  `~/.config/alacritty/alacritty.local.toml`; it's imported last, and a
+  missing file is fine.
 - **Hyprland:** see [desktop notes](hyprland/README.md). Monitors, application
   overrides and VM workarounds belong in `~/.config/hypr/machine.lua`.
+- **i3:** kept as a reference/fallback X11 setup, not actively used day to
+  day. Monitor names, the wallpaper path and per-app workspace assignments
+  are specific to the machine it was written on -- adjust them before using
+  it elsewhere.
 - **tmux:** project shortcuts belong in `~/.config/tmux/tmux.local.conf`, loaded
   before TPM. Generic session selection remains in the shared config.
 - **Neovim:** set `OBSIDIAN_VAULT` for the local vault. The existing fallback is

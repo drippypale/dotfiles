@@ -9,3 +9,4 @@ tmux/.config/tmux/plugins/
 **/hyprpaper.local.conf
 **/hyprlock.local.conf
 **/tmux.local.conf
+**/alacritty.local.toml

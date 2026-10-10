@@ -135,7 +135,7 @@ return {
   },
 
   {
-    'drippypal/nvim-rtl',
+    'drippypale/nvim-rtl',
     dir = vim.fn.stdpath 'config' .. '/lua/nvim-rtl',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
 

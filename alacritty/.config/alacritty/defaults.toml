@@ -1,0 +1,10 @@
+# Shared opacity/font-size defaults. Kept in an imported file (not the main
+# body) because alacritty.toml's own keys always win over imports, even ones
+# listed after it -- putting these here is what lets alacritty.local.toml
+# override them.
+
+[window]
+opacity = 0.6
+
+[font]
+size = 15

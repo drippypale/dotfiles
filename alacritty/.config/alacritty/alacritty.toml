@@ -1,6 +1,13 @@
 [general]
 import = [
+	"~/.config/alacritty/defaults.toml",
 	"~/.config/alacritty/catppuccin_mocha.toml",
+	# A missing local file is allowed (confirmed: alacritty only warns on
+	# the deprecated top-level `import` key, never on a missing path here);
+	# keep machine overrides outside the repo. Opacity/font size live in
+	# defaults.toml, not here, so this file's own keys don't beat the
+	# local override (alacritty.toml's body always wins over imports).
+	"~/.config/alacritty/alacritty.local.toml",
 ]
 
 [env]
@@ -13,15 +20,12 @@ padding.y = 10
 
 decorations = "Buttonless"
 
-opacity = 0.6
 blur = true
 
 option_as_alt = "Both"
 
 [font]
 normal.family = "MesloLGS Nerd Font Mono"
-
-size = 15
 
 [cursor]
 style = { shape = "Block", blinking = "On"}
