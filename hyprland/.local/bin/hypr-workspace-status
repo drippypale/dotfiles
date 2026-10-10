@@ -30,7 +30,7 @@ def query(command):
 def statuses(active, workspaces):
     current = active.get('name', '')
     names = {workspace.get('name', '') for workspace in workspaces}
-    for name in [str(number) for number in range(1, 11)] + ['Browser', 'Terminal', 'Files', 'Dev']:
+    for name in [str(number) for number in range(1, 11)] + ['Browser', 'Terminal']:
         shown = name in names or name == current or not name.isdigit()
         yield name, {
             'text': name if shown else '',

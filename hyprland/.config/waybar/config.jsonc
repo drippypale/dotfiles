@@ -14,9 +14,7 @@
     "custom/workspace-9",
     "custom/workspace-10",
     "custom/workspace-Browser",
-    "custom/workspace-Terminal",
-    "custom/workspace-Files",
-    "custom/workspace-Dev"
+    "custom/workspace-Terminal"
   ],
   "modules-center": [
     "clock"
@@ -162,24 +160,6 @@
     "exec": "$HOME/.local/bin/hypr-workspace-read Terminal",
     "return-type": "json",
     "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"name:Terminal\" })'",
-    "tooltip": false,
-    "hide-empty-text": true,
-    "exec-on-event": false,
-    "signal": 8
-  },
-  "custom/workspace-Files": {
-    "exec": "$HOME/.local/bin/hypr-workspace-read Files",
-    "return-type": "json",
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"name:Files\" })'",
-    "tooltip": false,
-    "hide-empty-text": true,
-    "exec-on-event": false,
-    "signal": 8
-  },
-  "custom/workspace-Dev": {
-    "exec": "$HOME/.local/bin/hypr-workspace-read Dev",
-    "return-type": "json",
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"name:Dev\" })'",
     "tooltip": false,
     "hide-empty-text": true,
     "exec-on-event": false,

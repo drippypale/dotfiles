@@ -215,7 +215,7 @@ hl.gesture({
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = machine.main_mod or "ALT"
+local mainMod = machine.main_mod or "SUPER"
 
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("vicinae toggle"))
 -- Example binds, see https://wiki.hypr.land/configuring/core/binds/ for more
@@ -226,7 +226,7 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + B", hl.dsp.layout("togglesplit"))    -- dwindle only
+hl.bind(mainMod .. " + W", hl.dsp.layout("togglesplit"))    -- dwindle only; moved off B, which the Browser named workspace uses
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + h",  hl.dsp.focus({ direction = "left" }))
@@ -325,8 +325,6 @@ hl.bind("Print", hl.dsp.exec_cmd(helper("hypr-screenshot")))
 local namedWorkspaces = {
     { name = "Browser",  key = "B", command = machine.browser or "google-chrome-stable --new-window" },
     { name = "Terminal", key = "T", command = terminal },
-    { name = "Files",    key = "E", command = fileManager },
-    { name = "Dev",      key = "D" },
 }
 
 -- Keep numeric workspace names distinct from named workspaces.

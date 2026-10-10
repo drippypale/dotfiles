@@ -3,7 +3,7 @@
 return {
     -- monitor_mode = "1920x1080@60",
     -- monitor_scale = 1,
-    -- main_mod = "ALT",
+    -- main_mod = "SUPER",
     -- terminal = "kitty",
     -- browser = "google-chrome-stable --new-window",
     -- file_manager = "dolphin",

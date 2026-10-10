@@ -1,7 +1,7 @@
 # Hyprland desktop
 
 This package preserves the current machine's **Lua configuration API**, including
-Alt-based tiling shortcuts, numbered workspaces, named Browser/Terminal/Files/Dev
+Super-based tiling shortcuts, numbered workspaces, named Browser/Terminal
 workspaces, and Super or Alt+Ctrl shortcuts for those named workspaces.
 
 It was validated with Hyprland `0.56.0`, development commit
