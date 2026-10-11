@@ -1,3 +1,9 @@
 [user]
-	email = s.dehestani@yektanet.ir
+	email = drippypale@gmail.com
 	name = Saman
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
