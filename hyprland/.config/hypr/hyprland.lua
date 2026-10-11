@@ -175,7 +175,7 @@ hl.config({
 
 hl.config({
     misc = {
-        force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
+        force_default_wallpaper = machine.wallpaper_index or -1, -- Pin one of the 3 built-in wallpapers (0/1/2) via machine.lua; -1 is random each launch
         disable_hyprland_logo   = false,
     },
 })

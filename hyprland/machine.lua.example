@@ -3,6 +3,10 @@
 return {
     -- monitor_mode = "1920x1080@60",
     -- monitor_scale = 1,
+    -- Pin one of Hyprland's 3 built-in wallpapers (0/1/2) instead of a
+    -- random one each launch. Only applies if you aren't using hyprpaper
+    -- with a real image via the hyprpaper.local.conf setup below.
+    -- wallpaper_index = 2,
     -- main_mod = "SUPER",
     -- terminal = "kitty",
     -- browser = "google-chrome-stable --new-window",
