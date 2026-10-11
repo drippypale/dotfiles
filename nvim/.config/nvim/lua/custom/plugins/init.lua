@@ -47,6 +47,17 @@ return {
   },
 
   {
+    -- Copy the dotted reference path of the Python symbol under the cursor,
+    -- e.g. `some.module.MyClass.method_1` -- IntelliJ's "Copy Reference".
+    'AnsonH/copy-python-path.nvim',
+    version = '*',
+    cmd = { 'CopyPythonPath' },
+    keys = {
+      { '<leader>rd', '<cmd>CopyPythonPath dotted<cr>', desc = '[R]eference [D]otted path' },
+    },
+  },
+
+  {
     -- auto tag for html and stuff
     'windwp/nvim-ts-autotag',
     ft = {
