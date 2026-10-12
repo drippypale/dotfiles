@@ -52,6 +52,7 @@ hl.on("hyprland.start", function ()
   hl.exec_cmd("waybar")
   hl.exec_cmd(machine.hyprpaper or "hyprpaper")
   hl.exec_cmd("mako")
+  hl.exec_cmd("nm-applet")
   hl.exec_cmd(helper("hypr-desktop-start"))
 end)
 

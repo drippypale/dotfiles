@@ -43,7 +43,10 @@
   "network": {
     "format-wifi": " {signalStrength}%",
     "format-ethernet": " connected",
-    "format-disconnected": "offline"
+    "format-disconnected": "offline",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "on-click": "nm-connection-editor",
+    "on-click-right": "nmcli radio wifi toggle"
   },
   "tray": {
     "spacing": 10
