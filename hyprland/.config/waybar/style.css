@@ -1,5 +1,5 @@
 * {
-  font-family: "sans-serif";
+  font-family: "MesloLGS Nerd Font Mono", "sans-serif";
   font-size: 13px;
 }
 window#waybar {
@@ -14,7 +14,7 @@ window#waybar {
   background-color: #89b4fa;
   color: #1e1e2e;
 }
-#clock, #pulseaudio, #network, #cpu, #memory, #tray {
+#clock, #pulseaudio, #network, #cpu, #memory, #battery, #tray {
   padding: 0 10px;
 }
 
